@@ -14,14 +14,20 @@ class CalculatorViewModel: ViewModel() {
     var state by mutableStateOf(CalculatorState())
         private set
 
-    fun onAction(action: CalculatorActions){
+    fun onAction(action: CalculatorAction){
         when(action){
-            is CalculatorActions.Number -> enterNumber(action.number)
-            is CalculatorActions.Decimal -> enterDecimal()
-            is CalculatorActions.Clear -> state = CalculatorState()
-            is CalculatorActions.Operation -> enterOperation(action.operations)
-            is CalculatorActions.Calculate -> performCalculation()
-            is CalculatorActions.Delete -> performDelete()
+            is CalculatorAction.Number -> enterNumber(action.number)
+            is CalculatorAction.Decimal -> enterDecimal()
+            is CalculatorAction.Clear -> state = CalculatorState()
+            is CalculatorAction.Operation -> enterOperation(action.operation)
+            is CalculatorAction.Calculate -> performCalculation()
+            is CalculatorAction.Delete -> performDelete()
+        }
+    }
+
+    private fun enterOperation(operation: CalculatorOperations) {
+        if(state.number1.isNotBlank()) {
+            state = state.copy(operation = operation)
         }
     }
 
@@ -63,12 +69,6 @@ class CalculatorViewModel: ViewModel() {
             )
         }
 
-    }
-
-    private fun enterOperation(operations: CalculatorOperations) {
-        if(state.number1.isNotBlank()){
-            state = state.copy(operation = operations)
-        }
     }
 
     private fun enterDecimal() {
